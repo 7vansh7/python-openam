@@ -17,9 +17,9 @@ __author__ = '{0} <{1}>'.format(__author_name__, __author_email__)
 __version__ = '1.1.0'
 
 import urllib
-import urllib2
+import urllib.request as urllib2
 import json
-import urlparse
+import urllib.parse as urlparse
 
 # REST API URIs
 REST_OPENAM_LOGIN = '/identity/json/authenticate'
@@ -294,9 +294,10 @@ def http_get(url, data, timeout):
     Send a simple HTTP GET and attempt to return the response data.
     """
 
-    params = urllib.urlencode(data)
+    params = urllib.parse.urlencode(data).encode("utf-8")
     try:
-        resp = urllib2.urlopen(url, data=params, timeout=timeout)
+        req = urllib2.Request(url)
+        resp = urllib2.urlopen(req, data=params, timeout=timeout)
     except urllib2.HTTPError:
         return ''
 
